@@ -11,7 +11,7 @@ namespace CabinetMedical.ClassesMetier
     /// <summary>
     /// Initializes the <see cref="Intervenant"/> class.
     /// </summary>
-    internal class Intervenant
+    public class Intervenant
     {
         private string nom;
         private string prénom;

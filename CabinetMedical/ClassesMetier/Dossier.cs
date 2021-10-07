@@ -6,12 +6,13 @@ namespace CabinetMedical.ClassesMetier
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using CabinetMedical.Exceptions;
 
     /// <summary>
     /// Initializes the <see cref="Dossier"/> class.
     /// </summary>
-    internal class Dossier
+    public class Dossier
     {
         private string nom;
         private string prenom;
@@ -135,17 +136,14 @@ namespace CabinetMedical.ClassesMetier
         public void AjoutePrestation(string libelle, DateTime date, Intervenant intervenant)
         {
             Prestation prestation = new Prestation(libelle, date, intervenant);
-            ////try
-            ////{
-            ////    if (prestation.DateHeureSoin >= this.dateCreation)
-            ////    {
-            this.AjoutePrestation(prestation);
-            ////    }
-            ////}
-            ////catch(Soins2021Exception ex)
-            ////{
-            ////    throw new Exception("Date de soin plus petite que date de création, insertion impossible");
-            ////}
+            if (prestation.DateHeureSoin > this.dateCreation)
+            {
+                this.AjoutePrestation(prestation);
+            }
+            else
+            {
+                throw new CabinetMedicalException("Date de soin plus petite que date de création, insertion impossible");
+            }
         }
 
         /// <summary>
@@ -194,6 +192,47 @@ namespace CabinetMedical.ClassesMetier
             }
 
             return dates.Count;
+        }
+
+        /// <summary>
+        /// Méthode qui receuille le nombre de jours soins v3.
+        /// </summary>
+        /// <returns>Retourne le nombre de prestations.</returns>
+        public int GetNbJoursSoinsV3()
+        {
+            List<Prestation> dateTrie = this.listePrestations.OrderBy(prest => prest.DateHeureSoin).ToList(); // ordre croissant
+
+            // List<Prestation> dateTrie = prestations.OrderByDescending(prest => prest.DateHeureSoin).ToList(); //ordre décroissant
+            DateTime baser = dateTrie[0].DateHeureSoin.Date;
+            int cpt = 0;
+
+            foreach (Prestation date in dateTrie)
+            {
+                if (!(date.DateHeureSoin.Date == baser))
+                {
+                    cpt++;
+                    baser = date.DateHeureSoin.Date;
+                }
+            }
+
+            return cpt + 1;
+        }
+            /// <summary>
+            /// Permet d'obtenir le nombre de prestation effectué par un intervenant externe.
+            /// </summary>
+            /// <returns>la somme totale.</returns>
+            public int GetNbPrestationsExternes()
+        {
+            int cpt = 0;
+            foreach (Prestation prestation in this.listePrestations)
+            {
+                if (prestation.UnIntervenant is IntervenantExterne)
+                {
+                    cpt++;
+                }
+            }
+
+            return cpt;
         }
     }
 }

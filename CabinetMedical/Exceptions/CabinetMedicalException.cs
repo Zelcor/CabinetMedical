@@ -10,7 +10,7 @@ namespace CabinetMedical.Exceptions
     /// <summary>
     /// Initializes the <see cref="CabinetMedicalException"/> class.
     /// </summary>
-    internal class CabinetMedicalException : Exception
+    public class CabinetMedicalException : Exception
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="CabinetMedicalException"/> class.
@@ -33,7 +33,5 @@ namespace CabinetMedical.Exceptions
             // Json j = new Json(tempException.Application, tempException.ClasseException, tempException.DateException, tempException.MessageException, tempException.UserException, tempException.UserMachine);
             // jaddError();
         }
-
-// public
     }
 }

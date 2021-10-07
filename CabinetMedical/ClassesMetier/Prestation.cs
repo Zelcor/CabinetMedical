@@ -5,13 +5,13 @@
 namespace CabinetMedical.ClassesMetier
 {
     using System;
-    using System.Collections.Generic;
-    using System.IO;
-
+    using CabinetMedical.Exceptions;
+    
+    
     /// <summary>
     /// Initializes the <see cref="Prestation"/> class.
     /// </summary>
-    internal class Prestation
+    public class Prestation
     {
         private string libelle;
         private DateTime dateHeureSoin;
@@ -26,22 +26,14 @@ namespace CabinetMedical.ClassesMetier
         /// <param name="unIntervenant"> Ici nous retrouvosn l'intervenant de la classe Intervenant. </param>
         public Prestation(string libelle, DateTime dateHeureSoin, Intervenant unIntervenant)
         {
+            if (dateHeureSoin > DateTime.Now)
+            {
+                throw new CabinetMedicalException("La date de la prestation ne peut être supérieure à la date du jour.");
+            }
+
             this.libelle = libelle;
             this.dateHeureSoin = dateHeureSoin;
             this.unIntervenant = unIntervenant;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Prestation"/> class.
-        /// </summary>
-        /// <param name="libelle"> Ici nous retrouvons le libelle de la prestation. </param>
-        /// <param name="dateHeureSoin"> Ici nous retrouvons la date et l'heure de la prestation. </param>
-        /// <param name="unIntervenantExterne"> Ici nous retrouvosn l'intervenant de la classe IntervenantExterne. </param>
-        public Prestation(string libelle, DateTime dateHeureSoin, IntervenantExterne unIntervenantExterne)
-        {
-            this.libelle = libelle;
-            this.dateHeureSoin = dateHeureSoin;
-            this.unIntervenantExterne = unIntervenantExterne;
         }
 
         /// <summary>
@@ -58,11 +50,6 @@ namespace CabinetMedical.ClassesMetier
         /// Gets un intervenant.
         /// </summary>
         public Intervenant UnIntervenant { get => this.unIntervenant; }
-
-        /// <summary>
-        /// Gets un intervenant externe.
-        /// </summary>
-        public IntervenantExterne UnIntervenantExterne { get => this.unIntervenantExterne; }
 
         /// <summary>
         /// Methode qui compare 2 prestations.
